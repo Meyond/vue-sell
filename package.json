@@ -11,8 +11,6 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "node-sass": "^4.5.3",
-    "sass-loader": "^6.0.5",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
@@ -52,8 +50,11 @@
     "sass-loader": "^6.0.5",
     "semver": "^5.3.0",
     "shelljs": "^0.7.6",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
     "url-loader": "^0.5.8",
     "vue-loader": "^11.3.4",
+    "vue-router": "^2.5.3",
     "vue-style-loader": "^2.0.5",
     "vue-template-compiler": "^2.2.6",
     "webpack": "^2.3.3",
