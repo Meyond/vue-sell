@@ -29,6 +29,16 @@ module.exports = {
     'no-multiple-empty-lines':1,
     //是否在逗号前后使用一致的空格
     'comma-spacing':0,
+    //强制在块之前使用一致的空格
+    'space-before-blocks':0,
+    //强制在 function的左括号之前使用一致的空格
+    'space-before-function-paren':0,
+    //强制在注释中 // 或 /* 使用一致的空格
+    'spaced-comment':0,
+    //是否禁止末尾逗号
+    'comma-dangle':1,
+    //对象字面量的属性中键和值之间使用一致的间距
+    'key-spacing':0
 
   }
 }
