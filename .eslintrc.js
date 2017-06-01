@@ -23,8 +23,11 @@ module.exports = {
     'generator-star-spacing': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    //提醒未使用的变量
+    "no-console": 0,
+    "no-cond-assign": 0,
     'no-unused-vars': 1,
+    "no-extra-semi": "warn",
+		"semi": "warn",
     //提醒多行空白
     'no-multiple-empty-lines':1,
     //是否在逗号前后使用一致的空格

@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Resource from 'vue-resource'
 import Hello from '@/components/Hello'
 import goods from '@/components/goods/goods'
 import seller from '@/components/seller/seller'
 import ratings from '@/components/ratings/ratings'
 
 Vue.use(Router)
+Vue.use(Resource)
 
 export default new Router({
   routes: [
@@ -30,8 +32,6 @@ export default new Router({
       name: 'ratings',
       component: ratings
     }
-  ],
+  ]
   //linkActiveClass:'active' 将.router-link-active替换位.active
 })
-
-
