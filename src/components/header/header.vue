@@ -211,7 +211,6 @@ export default {
       height:100%
       z-index:-1
       filter:blur(10px)
-
     .fade-enter-active, .fade-leave
       transition:all 0.5s
       background:rgba(7,17,27,0.8)
@@ -229,8 +228,6 @@ export default {
       top:0
       left:0
       overflow:auto
-
-
       .detail-wrapper
         min-height:100%
         width:100%
@@ -303,5 +300,4 @@ export default {
         margin:-64px auto 0 auto
         clear:both
         font-size:32px
-
 </style>
