@@ -41,7 +41,10 @@ module.exports = {
     //是否禁止末尾逗号
     'comma-dangle':1,
     //对象字面量的属性中键和值之间使用一致的间距
-    'key-spacing':0
-
+    'key-spacing':0,
+    //块内填充提醒
+    'padded-blocks':1,
+    //末尾逗号提醒
+    'comma-dangle':1
   }
 }
