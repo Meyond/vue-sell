@@ -2,7 +2,7 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menu-wrapper">
       <ul>
-        <li v-for="(item, index) in goods" class="menu-item" :class="{'current':currentIndex === index}">
+        <li v-for="(item, index) in goods" class="menu-item" :class="{'current':currentIndex === index}" @click="selectMenu(index, $event)">
           <span class="text border-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
@@ -29,17 +29,23 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol @cartAdd="_drop" :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
+import shopcart from '../../components/shopcart/shopcart.vue'
+import cartcontrol from '../../components/cartcontrol/cartcontrol.vue'
 
 const ERROR_OK = 0
 export default {
@@ -65,6 +71,17 @@ export default {
         }
       }
       return 0
+    },
+    selectFoods() {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count > 0) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   created() {
@@ -74,6 +91,7 @@ export default {
       response = response.body
       if (response.errno === ERROR_OK) {
         this.goods = response.data
+        // 与dom相关的一些计算，一定要确保dom渲染完成
         this.$nextTick(() => {
           this._initScroll() // 列表滑动
           this._calculateHeight() // 列表高度计算
@@ -83,8 +101,8 @@ export default {
   },
   methods: {
     _initScroll() {
-      this.menuSroll = new BScroll(this.$refs['menu-wrapper'], {})
-      this.foodsScroll = new BScroll(this.$refs['foods-wrapper'], { probeType: 3 })
+      this.menuSroll = new BScroll(this.$refs['menu-wrapper'], { click: true })
+      this.foodsScroll = new BScroll(this.$refs['foods-wrapper'], { probeType: 3, click: true })
 
       this.foodsScroll.on('scroll', (pos) => {
         this.scrollY = Math.abs(Math.round(pos.y))
@@ -99,6 +117,30 @@ export default {
         height += item.clientHeight
         this.listHeight.push(height)
       }
+    },
+    selectMenu(index, event) {
+      if (!event._constructed) {
+        return // 通过判断事件是否具有_constructed属性来过滤掉原生点击事件，从而阻止函数多次执行
+      }
+      console.log(index)
+      let foodList = this.$refs['foods-wrapper'].getElementsByClassName('food-list-hook')
+      let el = foodList[index]
+      //将foodsList滚动到指定index
+      this.foodsScroll.scrollToElement(el, 500)
+    },
+    _drop(target) {
+      //将事件对象传递给shopcart的drop方法处理
+      this.$refs['shopcart'].drop(target)
+    }
+  },
+  components: {
+    shopcart,
+    cartcontrol
+  },
+  events: {
+    // 在父组件中接收cartcontrol中的addCart事件，并调用_drop方法处理
+    'cart.add'(target) {
+      this._drop(target)
     }
   }
 }
@@ -124,7 +166,6 @@ export default {
         line-height:14px
         padding:0 12px
         &.current
-          position:absolute
           margin-top:1px
           z-index:10
           background:#fff
@@ -157,11 +198,12 @@ export default {
           border-1px(rgba(7,17,27,.1))
     .foods-wrapper
       flex:1
+      border-left: 1px solid #ccc;
       .title
         padding-left:14px
         height:26px
         line-height:26px
-        border-left:2px solid #d9dde1
+        border-left:1px solid #d9dde1
         font-size:12px
         color:rgb(147,153,159)
         background:#f3f5f7
@@ -197,11 +239,15 @@ export default {
             font-weight:700
             line-height:24px
             .now
-              margin-right:8px
+              margin-right:2px
               font-size:14px
               color:rgb(240,20,20)
             .old
               text-decoration:line-through
               font-size:10px
               color:rgb(147,153,149)
+          .cartcontrol-wrapper
+            position:absolute
+            right:0
+            bottom:12px
 </style>
