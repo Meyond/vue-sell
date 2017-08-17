@@ -18,7 +18,7 @@
     <div class="ball-container">
       <transition-group class="drop">
         <div class="ball" v-for="ball in balls" v-show="ball.show" :key="'ball'+ parseInt(Math.random()*100)">
-          <div class="inner"></div>
+          <div class="inner inner-hook"></div>
         </div>
       </transition-group>
     </div>
@@ -122,17 +122,27 @@ export default {
               let y = -(window.innerHeight - rect.top - 22)
               el.style.display = ''
               el.style.transform = `translate3d(0,${y}px,0)`
-              let inner = el.getElementsByClassName('inner-hook')
+              let inner = el.getElementsByClassName('inner-hook')[0]
               inner.style.transform = `translate3d(${x}px,0,0)`
-
             }
           }
         },
         enter(el) {
-
+          /* eslint-disable no-unused-vars */
+          let rf = el.offsetHeight
+          this.$nextTice(() => {
+            el.style.display = ''
+            el.style.transform = 'translate3d(0,0,0)'
+            let inner = el.getElementsByClassName('inner-hook')[0]
+            inner.style.transform = 'translate3d(0,0,0)'
+          })
         },
         afterEnter(el) {
-
+          let ball = this.dropBalls.shift()
+          if (ball) {
+            ball.show = false
+            el.style.display = 'none'
+          }
         }
       }
     }
@@ -234,9 +244,11 @@ export default {
     .ball-container
       .drop-enter,.drop-leave-active,.drop-leave,.drop-enter-active
         transition:all .4s
-      .drop-enter,.drop-leave-active
-
-      .drop-leave,.drop-enter-active
+      .drop-enter,
+      .drop-enter-active
+      .drop-leave-active
+        opacity:0
+      .drop-leave,
 
       .ball
         position:fixed
